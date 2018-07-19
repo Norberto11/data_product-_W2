@@ -1,0 +1,25 @@
+---
+title: <font size="5"> ROAD MOTOR VEHICLES PER 1000 PEOPLE WORLDWIDE </font>
+output: html_document
+---
+
+(Reference: Wikipedia) 
+https://en.wikipedia.org/wiki/List_of_countries_by_vehicles_per_capita
+
+*Click on each country to display the country name and amount of motor vehicles per 1000 people*
+
+```{r carsmap,echo=FALSE,message=FALSE}
+library(leaflet)
+library(dplyr)
+cars<-read.csv("./cars.csv",stringsAsFactors = FALSE)
+cars$lat<-cars$Lat
+cars$lng<-cars$Long
+cars$popup<-paste(cars$Country,",",cars$Amount)
+cars2<-select(cars,Country,Amount,lat,lng,popup)
+cars2%>%
+      leaflet()%>%
+      addTiles()%>%
+      addCircleMarkers(weight = 1, radius = sqrt(cars2$Amount) * 0.3,popup=cars$popup,col="red")
+```
+
+
